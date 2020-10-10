@@ -5,16 +5,15 @@ import {
   Param,
   ParseIntPipe,
   Post,
-  Query,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiOkResponse,
   ApiParam,
-  ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
-import { ApiError, createUserDto, userResposeDto } from './model/user.dto';
+import { ApiError, createUserDto } from './model/user.dto';
+import { UserEntity } from './model/user.entity';
 import { UserService } from './user.service';
 
 @Controller('user')
@@ -22,26 +21,20 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private readonly _userService: UserService) {}
 
-  @Get('share')
-  async getShare() {
-    return this._userService.getShare();
-  }
-
   @Get(':id')
-  @ApiOkResponse({ type: userResposeDto })
+  @ApiOkResponse({ type: UserEntity })
   @ApiBadRequestResponse({ type: ApiError })
   @ApiParam({ name: 'id', type: Number, required: true })
-  @ApiQuery({ name: 'username', type: String, required: false })
   getUser(
     @Param('id', ParseIntPipe) id: number,
-    @Query('username') username: string,
   ) {
-    return this._userService.getUser(id, username);
+    return this._userService.getUser(id);
   }
 
-  @Get()
-  async getArticle() {
-    return this._userService.getArticle();
+  @Get(':id/articles')
+  @ApiParam({name: 'id', type: Number, required: true})
+  getAllArticles(@Param('id', ParseIntPipe) id: number){
+    return this._userService.getArticle(id);
   }
 
   @Post()

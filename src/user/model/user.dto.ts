@@ -20,14 +20,9 @@ export class ApiError {
 export class createUserDto {
   @ApiProperty()
   @IsNotEmpty()
-  username: string;
+  firstname: string;
 
   @ApiProperty()
   @IsNotEmpty()
-  @IsEmail()
-  email: string;
-
-  @ApiPropertyOptional()
-  @IsNumber()
-  age: number;
+  lastname: string;
 }
